@@ -1,2 +1,16 @@
 # cglm-php-ffi
 cglm binding for PHP using FFI
+
+Tested with PHP-cli 8.0.x under Linux.
+
+This binding reuses and tries to improve the encapsulating method from [oratoto/raylib-php-ffi](https://github.com/oraoto/raylib-php-ffi) applied to the [recp/cglm](https://github.com/recp/cglm) C API :
+
+- the cglm C API is encapsulated into a PHP class `GLM` which only contains `const` and `static` members ;
+- a `__callStatic()` method is used to call C functions using FFI. Example : `` GLM::vec3_normalize( $vec ); `` ;
+- if required, it is possible to override a C function by adding a ` public static function ` with the same name into the class. This can be used to simply the C API and the usage of FFI with some functions that requires pointers.
+- helpers can be added to the ` GLM:: ` API.
+
+
+## TODO :
+
+- add some helpers that would make the API easier to use in PHP ...
