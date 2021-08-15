@@ -1,6 +1,7 @@
 #define FFI_LIB "./lib/libcglm.so"
 
-// types.h
+
+// types.h ------------------------------------------------------------
 
 typedef float                   vec2[2];
 typedef float                   vec3[3];
@@ -11,104 +12,37 @@ typedef vec3                    mat3[3];
 typedef vec2                    mat2[2];
 typedef vec4  /*CGLM_ALIGN_MAT*/ mat4[4];
 
-// types-struct.h
 
-typedef union vec2s {
-  vec2 raw;
 
-  struct {
-    float x;
-    float y;
-  };
+// custom types helpers :
 
-} vec2s;
+typedef union
+{
+	vec3 v[2];
+	struct { vec3 min, max ; }
+}
+Aabb;
 
-typedef union vec3s {
-  vec3 raw;
+typedef union 
+{ 
+	vec4 v[6]; 
+	struct { vec4 left, right, bottom, top, near, far; }
+}
+FrustumPlanes;
 
-  struct {
-    float x;
-    float y;
-    float z;
-  };
+typedef union 
+{ 
+	vec4 v[8];
+	struct { vec4 LBN,LTN,RTN,RBN, LBF,LTF,RTF,RBF; }
+} 
+FrustumCorners;
 
-} vec3s;
-
-typedef union ivec3s {
-  ivec3 raw;
-
-  struct {
-    int x;
-    int y;
-    int z;
-  };
-
-} ivec3s;
-
-typedef union /*CGLM_ALIGN_IF(16)*/ vec4s {
-  vec4 raw;
-
-  struct {
-    float x;
-    float y;
-    float z;
-    float w;
-  };
-
-} vec4s;
-
-typedef union /*CGLM_ALIGN_IF(16)*/ versors {
-  vec4 raw;
-
-  struct {
-    float x;
-    float y;
-    float z;
-    float w;
-  };
-
-  struct {
-    vec3s imag;
-    float real;
-  };
-
-} versors;
-
-typedef union mat2s {
-  mat2  raw;
-  vec2s col[2];
-
-  struct {
-    float m00, m01;
-    float m10, m11;
-  };
-
-} mat2s;
-
-typedef union mat3s {
-  mat3  raw;
-  vec3s col[3];
-
-  struct {
-    float m00, m01, m02;
-    float m10, m11, m12;
-    float m20, m21, m22;
-  };
-
-} mat3s;
-
-typedef union /*CGLM_ALIGN_MAT*/ mat4s {
-  mat4  raw;
-  vec4s col[4];
-
-  struct {
-    float m00, m01, m02, m03;
-    float m10, m11, m12, m13;
-    float m20, m21, m22, m23;
-    float m30, m31, m32, m33;
-  };
-
-} mat4s;
+typedef union 
+{ 
+	vec4 v[4];
+	struct { vec4 LB,LT,RT,RB; }
+} 
+PlaneCorners;
 
 
 // vec2.h --------------------------------------------------------------------------------------------------------------
@@ -648,8 +582,9 @@ glmc_mat2_copy(mat2 mat, mat2 dest);
 void
 glmc_mat2_identity(mat2 mat);
 
-void
-glmc_mat2_identity_array(mat2 * /*__restrict*/ mat, size_t count);
+// TODO ?
+//void
+//glmc_mat2_identity_array(mat2 * /*__restrict*/ mat, size_t count);
 
 void
 glmc_mat2_zero(mat2 mat);
@@ -699,8 +634,9 @@ glmc_mat3_identity(mat3 mat);
 void
 glmc_mat3_zero(mat3 mat);
 
-void
-glmc_mat3_identity_array(mat3 * /*__restrict*/ mat, size_t count);
+// TODO ?
+//void
+//glmc_mat3_identity_array(mat3 * /*__restrict*/ mat, size_t count);
 
 void
 glmc_mat3_mul(mat3 m1, mat3 m2, mat3 dest);
@@ -751,8 +687,9 @@ glmc_mat4_copy(mat4 mat, mat4 dest);
 void
 glmc_mat4_identity(mat4 mat);
 
-void
-glmc_mat4_identity_array(mat4 * /*__restrict*/ mat, size_t count);
+// TODO ?
+//void
+//glmc_mat4_identity_array(mat4 * /*__restrict*/ mat, size_t count);
 
 void
 glmc_mat4_zero(mat4 mat);
@@ -872,8 +809,9 @@ glmc_rotate(mat4 m, float angle, vec3 axis);
 void
 glmc_rotate_at(mat4 m, vec3 pivot, float angle, vec3 axis);
 
-void
-glmc_rotate_atm(mat4 m, vec3 pivot, float angle, vec3 axis);
+// TODO ?
+//void
+//glmc_rotate_atm(mat4 m, vec3 pivot, float angle, vec3 axis);
 
 void
 glmc_decompose_scalev(mat4 m, vec3 s);
@@ -1000,8 +938,9 @@ glmc_persp_sizes(mat4 proj, float fovy, vec4 dest);
 void
 glmc_quat_identity(versor q);
 
-void
-glmc_quat_identity_array(versor * /*__restrict*/ q, size_t count);
+// TODO ?
+//void
+//glmc_quat_identity_array(versor * /*__restrict*/ q, size_t count);
 
 void
 glmc_quat_init(versor q, float x, float y, float z, float w);
@@ -1144,8 +1083,9 @@ glmc_euler_yzx(vec3 angles, mat4 dest);
 void
 glmc_euler_yxz(vec3 angles, mat4 dest);
 
-void
-glmc_euler_by_order(vec3 angles, glm_euler_seq axis, mat4 dest);
+//TODO ??
+//void
+//glmc_euler_by_order(vec3 angles, glm_euler_seq axis, mat4 dest);
 
 
 // plane.h --------------------------------------------------------------------------------------------------------------
