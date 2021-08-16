@@ -1,5 +1,7 @@
 <?php
 
+GLM::GLM(); // autoinit
+
 /**
  *  The ` GLM ` class is used as a container for the glmc API.
  * 
@@ -157,6 +159,12 @@ class GLM
 
 	public static function GLM()
 	{
+		if ( static::$ffi ) 
+		{ 
+			debug_print_backtrace();
+			exit("GLM::GLM() already init".PHP_EOL); 
+		}
+		
 		$cdef = __DIR__ . '/GLM.ffi.php.h';
 		static::$ffi = FFI::load($cdef);
 		
