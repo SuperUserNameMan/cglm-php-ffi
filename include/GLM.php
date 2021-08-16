@@ -1,4 +1,4 @@
-<?php
+<?php if ( class_exists("GLM") ) return;
 
 /**
  *  The ` GLM ` class is used as a container for the glmc API.
@@ -157,6 +157,8 @@ class GLM
 
 	public static function GLM()
 	{
+		if ( ! empty( static::$ffi ) ) return;
+		
 		$cdef = __DIR__ . '/GLM.ffi.php.h';
 		static::$ffi = FFI::load($cdef);
 		
@@ -1227,6 +1229,7 @@ class Mat2
 			$M[1][1] = $A[1][1] ?? $A[3] ?? 0.0 ;
 		}
 		else
+		if ( $A !== null )
 		{
 			exit("Mat2::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
@@ -1311,6 +1314,7 @@ class Mat3
 			$M[2][2] = $A[2][2] ?? $A[8] ?? 0.0 ;
 		}
 		else
+		if ( $A !== null )
 		{
 			exit("Mat3::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
@@ -1404,6 +1408,7 @@ class Mat4
 			$M[3][3] = $A[3][3] ?? $A[15] ?? 0.0 ;
 		}
 		else
+		if ( $A !== null )
 		{
 			exit("Mat4::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
@@ -1746,3 +1751,4 @@ class Quat
 }
 
 
+GLM::GLM();
