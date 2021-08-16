@@ -149,7 +149,16 @@ class GLM
 	
 	static $ffi_typeof_aabb;
 	
-	static $ffi_typeof_quat;
+	static $ffi_typeof_quat; // aka versor
+	
+	static $ffi_typeof_FrustumPlanes;
+	static $ffi_typeof_struct_LR_Planes;
+	static $ffi_typeof_struct_TB_Planes;
+	static $ffi_typeof_struct_NF_Planes; 
+	
+	static $ffi_typeof_FrustumCorners;
+	static $ffi_typeof_PlaneCorners;
+	
 
 	//----------------------------------------------------------------------------------
 	// FFI initialisation
@@ -181,6 +190,14 @@ class GLM
 		static::$ffi_typeof_aabb  = static::$ffi->type( "Aabb");
 		
 		static::$ffi_typeof_quat  = static::$ffi->type( "versor" ); //!\ "versor" is how cglm calls "quaternion"
+		
+		static::$ffi_typeof_FrustumPlanes  = static::$ffi->type( "FrustumPlanes"  );
+		static::$ffi_typeof_FrustumCorners = static::$ffi->type( "FrustumCorners" );
+		static::$ffi_typeof_PlaneCorners   = static::$ffi->type( "PlaneCorners"  );
+		
+		static::$ffi_typeof_struct_LR_Planes = static::$ffi->type( "struct { float left,  right; }" );
+		static::$ffi_typeof_struct_TB_Planes = static::$ffi->type( "struct { float  top, bottom; }" );
+		static::$ffi_typeof_struct_NF_Planes = static::$ffi->type( "struct { float near,    far; }" );
 	}
 
 
@@ -693,7 +710,7 @@ class GLM
 	
 	public static function persp_decomp( $P )
 	{
-		$f = static::$ffi->new("FrustumPlanes");
+		$f = static::$ffi->new( static::$ffi_typeof_FrustumPlanes );
 		
 		static::$ffi->glmc_persp_decomp( $P 
 			, FFI::addr( $f->near   )
@@ -709,7 +726,7 @@ class GLM
 	
 	public static function persp_decomp_x( $P )
 	{
-		$f = static::$ffi->new("struct{ float left, right; }");
+		$f = static::$ffi->new( static::$ffi_typeof_struct_LR_Planes );
 		
 		static::$ffi->glmc_persp_decomp_x( $P 
 			, FFI::addr( $f->left   )
@@ -721,7 +738,7 @@ class GLM
 	
 	public static function persp_decomp_y( $P )
 	{
-		$f = static::$ffi->new("struct{ float top, bottom; }");
+		$f = static::$ffi->new( static::$ffi_typeof_struct_TB_Planes );
 		
 		static::$ffi->glmc_persp_decomp_y( $P 
 			, FFI::addr( $f->top    )
@@ -733,7 +750,7 @@ class GLM
 	
 	public static function persp_decomp_z( $P )
 	{
-		$f = static::$ffi->new("struct{ float near, far; }");
+		$f = static::$ffi->new( static::$ffi_typeof_struct_NF_Planes );
 		
 		static::$ffi->glmc_persp_decomp_z( $P 
 			, FFI::addr( $f->near )
@@ -837,15 +854,15 @@ class GLM
 	
 	public static function FrustumPlanes( /*TODO add init params */ )
 	{
-		return static::$ffi->new("FrustumPlanes");
+		return static::$ffi->new( static::$ffi_typeof_FrustumPlanes );
 	}
 	public static function FrustumCorners( /*TODO add init params */ )
 	{
-		return static::$ffi->new("FrustumCorners");
+		return static::$ffi->new( static::$ffi_typeof_FrustumCorners );
 	}
 	public static function PlaneCorners( /*TODO add init params */ )
 	{
-		return static::$ffi->new("PlaneCorners");
+		return static::$ffi->new( static::$ffi_typeof_PlaneCorners );
 	}
 	
 	public static function frustum_planes( $M , $Planes=null )
@@ -930,7 +947,7 @@ class Vec2
 			return GLM::$ffi->new("vec2[$A]");
 		}
 		
-		$V = GLM::$ffi->new("vec2");
+		$V = GLM::$ffi->new( GLM::$ffi_typeof_vec2 );
 		
 		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
@@ -952,7 +969,7 @@ class Vec2
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("vec2");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_vec2 );
 		GLM::$ffi->glmc_vec2_copy( $A , $D );
 		return $D;
 	}
@@ -997,7 +1014,7 @@ class Vec3
 			return GLM::$ffi->new("vec3[$A]");
 		}
 		
-		$V = GLM::$ffi->new("vec3");
+		$V = GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		
 		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
@@ -1026,7 +1043,7 @@ class Vec3
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("vec3");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		GLM::$ffi->glmc_vec3_copy( $A , $D );
 		return $D;
 	}
@@ -1106,7 +1123,7 @@ class Vec4
 			return GLM::$ffi->new("vec4[$A]");
 		}
 		
-		$V = GLM::$ffi->new("vec4");
+		$V = GLM::$ffi->new( GLM::$ffi_typeof_vec4 );
 		
 		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
@@ -1144,7 +1161,7 @@ class Vec4
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("vec4");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_vec4 );
 		GLM::$ffi->glmc_vec4_copy( $A , $D );
 		return $D;
 	}
@@ -1224,7 +1241,7 @@ class Mat2
 			return GLM::$ffi->new("mat2[$A]");
 		}
 		
-		$M = GLM::$ffi->new("mat2");
+		$M = GLM::$ffi->new( GLM::$ffi_typeof_mat2 );
 		
 		if ( is_array( $A ) )
 		{
@@ -1245,7 +1262,7 @@ class Mat2
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("mat2");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_mat2 );
 		GLM::$ffi->glmc_mat2_copy( $A , $D );
 		return $D;
 	}
@@ -1303,7 +1320,7 @@ class Mat3
 			return GLM::$ffi->new("mat3[$A]");
 		}
 		
-		$M = GLM::$ffi->new("mat3");
+		$M = GLM::$ffi->new( GLM::$ffi_typeof_mat3 );
 		
 		if ( is_array( $A ) )
 		{
@@ -1330,7 +1347,7 @@ class Mat3
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("mat3");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_mat3 );
 		GLM::$ffi->glmc_mat3_copy( $A , $D );
 		return $D;
 	}
@@ -1389,7 +1406,7 @@ class Mat4
 			return GLM::$ffi->new("mat4[$A]");
 		}
 		
-		$M = GLM::$ffi->new("mat4");
+		$M = GLM::$ffi->new( GLM::$ffi_typeof_mat4 );
 		
 		if ( is_array( $A ) )
 		{
@@ -1424,7 +1441,7 @@ class Mat4
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("mat4");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_mat4 );
 		GLM::$ffi->glmc_mat3_copy( $A , $D );
 		return $D;
 	}
@@ -1478,7 +1495,7 @@ class Aabb
 			return GLM::$ffi->new("Aabb[$A]");
 		}
 		
-		$B = GLM::$ffi->new("Aabb");
+		$B = GLM::$ffi->new( GLM::$ffi_typeof_aabb );
 		
 		if ( is_array( $A ) ) // [ Vmin[] , Vmax[] ]
 		{
@@ -1495,7 +1512,7 @@ class Aabb
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("Aabb");
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_aabb );
 		GLM::$ffi->glmc_vec3_copy( $A->min , $D->min );
 		GLM::$ffi->glmc_vec3_copy( $A->max , $D->max );
 		return $D;
@@ -1663,10 +1680,10 @@ class Quat
 	{
 		if ( is_int( $A ) )
 		{
-			return GLM::$ffi->new("versor[$A]");
+			return GLM::$ffi->new("versor[$A]"); //!\ 'versor' is the name used by cglm for quaternion
 		}
 		
-		$V = GLM::$ffi->new("versor"); //!\ 'versor' is the name used by cglm for quaternion
+		$V = GLM::$ffi->new( GLM::$ffi_typeof_quat ); //!\ 'versor' is the name used by cglm for quaternion
 		
 		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
@@ -1704,7 +1721,7 @@ class Quat
 	
 	public static function clone( $A )
 	{
-		$D = GLM::$ffi->new("versor"); //!\ 'versor' is the name used by cglm for quaternion
+		$D = GLM::$ffi->new( GLM::$ffi_typeof_quat ); //!\ 'versor' is the name used by cglm for quaternion
 		GLM::$ffi->glmc_quat_copy( $A , $D );
 		return $D;
 	}
