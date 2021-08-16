@@ -1,4 +1,4 @@
-<?php if ( class_exists("GLM") ) return;
+<?php
 
 /**
  *  The ` GLM ` class is used as a container for the glmc API.
@@ -157,8 +157,6 @@ class GLM
 
 	public static function GLM()
 	{
-		if ( ! empty( static::$ffi ) ) return;
-		
 		$cdef = __DIR__ . '/GLM.ffi.php.h';
 		static::$ffi = FFI::load($cdef);
 		
@@ -1751,4 +1749,3 @@ class Quat
 }
 
 
-GLM::GLM();
