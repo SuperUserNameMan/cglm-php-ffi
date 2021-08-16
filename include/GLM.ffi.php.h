@@ -3,6 +3,8 @@
 
 // types.h ------------------------------------------------------------
 
+// TODO : convert macro GLM_ALIGN_IF(16) ?
+// TODO : understand the impact of this alignement with FFI depending on which plateform we are running
 typedef float                   vec2[2];
 typedef float                   vec3[3];
 typedef int                    ivec3[3];

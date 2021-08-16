@@ -100,6 +100,22 @@ class GLM
 	// Const Definition
 	//----------------------------------------------------------------------------------
 
+	const E         = 2.71828182845904523536028747135266250  ; /* e           */
+	const LOG2E     = 1.44269504088896340735992468100189214  ; /* log2(e)     */
+	const LOG10E    = 0.434294481903251827651128918916605082 ; /* log10(e)    */
+	const LN2       = 0.693147180559945309417232121458176568 ; /* loge(2)     */
+	const LN10      = 2.30258509299404568401799145468436421  ; /* loge(10)    */
+	const PI        = 3.14159265358979323846264338327950288  ; /* pi          */
+	const PI_2      = 1.57079632679489661923132169163975144  ; /* pi/2        */
+	const PI_4      = 0.785398163397448309615660845819875721 ; /* pi/4        */
+	const _1_PI     = 0.318309886183790671537767526745028724 ; /* 1/pi        */
+	const _2_PI     = 0.636619772367581343075535053490057448 ; /* 2/pi        */
+	const _2_SQRTPI = 1.12837916709551257389615890312154517  ; /* 2/sqrt(pi)  */
+	const SQRT2     = 1.41421356237309504880168872420969808  ; /* sqrt(2)     */
+	const SQRT1_2   = 0.707106781186547524400844362104849039 ; /* 1/sqrt(2)   */
+
+	// --- FrustumCorners->v[ index ] :
+
 	const LBN = 0 ; /* left  bottom near */
 	const LTN = 1 ; /* left  top    near */
 	const RTN = 2 ; /* right top    near */
@@ -110,6 +126,7 @@ class GLM
 	const RTF = 6 ; /* right top    far  */
 	const RBF = 7 ; /* right bottom far  */
 
+	// --- FrustumPlanes->v[ index ]
 	const LEFT   = 0 ;
 	const RIGHT  = 1 ;
 	const BOTTOM = 2 ;
@@ -118,7 +135,7 @@ class GLM
 	const FAR    = 5 ;
 
 
-	static $typeof_void_p;
+	static $typeof_void_p; // TODO renom GLM::$typeof_xxx and GLM::$ffi_typeof_xxx
 
 	static $typeof_vec2;
 	static $typeof_vec3;
@@ -180,14 +197,15 @@ class GLM
 			;
 	}
 	
-	public static function Vec2( $V )
+	
+	public static function Vec2( $V ) // TODO renommer en GLM::Vec2($V) and GLM::to_Vec2( $V ) puis utilise GLM::Vec2($A=null) comme alias de Vec2::new($A=null)
 	{
 		if ( static::is_Vec2( $V ) ) return $V ;
 		
 		return Vec2::new([ $V[0] , $V[1] ]);
 	}
 	
-	public static function Vec3( $V , $_z=0.0 )
+	public static function Vec3( $V , $_z=0.0 ) // TODO renommer en to_Vec3( $V )
 	{
 		if ( static::is_Vec3( $V ) ) return $V ;
 		
