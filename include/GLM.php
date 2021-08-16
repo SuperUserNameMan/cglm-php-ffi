@@ -1228,7 +1228,7 @@ class Mat2
 		}
 		else
 		{
-			error("Mat2::new() : Err, unsupported initialisation parameter.");
+			exit("Mat2::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
 		
 		return $M;
@@ -1312,7 +1312,7 @@ class Mat3
 		}
 		else
 		{
-			error("Mat3::new() : Err, unsupported initialisation parameter.");
+			exit("Mat3::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
 		
 		return $M;
@@ -1405,7 +1405,7 @@ class Mat4
 		}
 		else
 		{
-			error("Mat4::new() : Err, unsupported initialisation parameter.");
+			exit("Mat4::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
 
 		return $M;
@@ -1476,7 +1476,7 @@ class Aabb
 		}
 		else
 		{
-			error("Aabb::new() : Err, unsupported initialisation parameter.");
+			exit("Aabb::new() : Err, unsupported initialisation parameter.".PHP_EOL);
 		}
 		
 		return $B;
