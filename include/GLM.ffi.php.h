@@ -5,14 +5,18 @@
 
 // TODO : convert macro GLM_ALIGN_IF(16) ?
 // TODO : understand the impact of this alignement with FFI depending on which plateform we are running
-typedef float                   vec2[2];
-typedef float                   vec3[3];
-typedef int                    ivec3[3];
-typedef float /*CGLM_ALIGN_IF(16)*/ vec4[4];
-typedef vec4  /*CGLM_ALIGN_IF(16)*/ versor;     /* |x, y, z, w| -> w is the last */
-typedef vec3                    mat3[3];
-typedef vec2                    mat2[2];
-typedef vec4  /*CGLM_ALIGN_MAT*/ mat4[4];
+// Notes : 
+// - on linux x64, FFI::alignof() always return 4 (bytes) for each of these typedef
+// - __attribute((aligned(X))) seems to have no impact on FFI::alignof()
+// - i have obviously no clue what i'm trying to accomplish here ... !!!
+typedef                       float  vec2[2];
+typedef                       float  vec3[3];
+typedef                       int   ivec3[3];
+typedef __attribute((aligned(16))) /*CGLM_ALIGN_IF(16)*/ float  vec4[4]; 
+typedef                       vec4    versor;  /* |x, y, z, w| -> w is the last */
+typedef                       vec3   mat3[3];
+typedef __attribute((aligned(16))) /*CGLM_ALIGN_IF(16)*/ vec2   mat2[2]; 
+typedef __attribute((aligned(32))) /*CGLM_ALIGN_MAT*/    vec4   mat4[4]; 
 
 
 
@@ -50,7 +54,7 @@ PlaneCorners;
 // vec2.h --------------------------------------------------------------------------------------------------------------
 
 void
-glmc_vec2(float * /*__restrict*/ v, vec2 dest);
+glmc_vec2(float * __restrict v, vec2 dest);
 
 void
 glmc_vec2_copy(vec2 a, vec2 dest);
@@ -584,9 +588,8 @@ glmc_mat2_copy(mat2 mat, mat2 dest);
 void
 glmc_mat2_identity(mat2 mat);
 
-// TODO ?
-//void
-//glmc_mat2_identity_array(mat2 * /*__restrict*/ mat, size_t count);
+void
+glmc_mat2_identity_array(mat2 * __restrict mat, size_t count);
 
 void
 glmc_mat2_zero(mat2 mat);
@@ -636,9 +639,8 @@ glmc_mat3_identity(mat3 mat);
 void
 glmc_mat3_zero(mat3 mat);
 
-// TODO ?
-//void
-//glmc_mat3_identity_array(mat3 * /*__restrict*/ mat, size_t count);
+void
+glmc_mat3_identity_array(mat3 * __restrict mat, size_t count);
 
 void
 glmc_mat3_mul(mat3 m1, mat3 m2, mat3 dest);
@@ -689,9 +691,8 @@ glmc_mat4_copy(mat4 mat, mat4 dest);
 void
 glmc_mat4_identity(mat4 mat);
 
-// TODO ?
-//void
-//glmc_mat4_identity_array(mat4 * /*__restrict*/ mat, size_t count);
+void
+glmc_mat4_identity_array(mat4 * __restrict mat, size_t count);
 
 void
 glmc_mat4_zero(mat4 mat);
@@ -709,7 +710,7 @@ void
 glmc_mat4_mul(mat4 m1, mat4 m2, mat4 dest);
 
 void
-glmc_mat4_mulN(mat4 * /*__restrict*/ matrices[], uint32_t len, mat4 dest);
+glmc_mat4_mulN(mat4 * __restrict matrices[], uint32_t len, mat4 dest);
 
 void
 glmc_mat4_mulv(mat4 m, vec4 v, vec4 dest);
@@ -892,36 +893,36 @@ glmc_look_anyup(vec3 eye, vec3 dir, mat4 dest);
 
 void
 glmc_persp_decomp(mat4 proj,
-                  float * /*__restrict*/ nearZ,
-                  float * /*__restrict*/ farZ,
-                  float * /*__restrict*/ top,
-                  float * /*__restrict*/ bottom,
-                  float * /*__restrict*/ left,
-                  float * /*__restrict*/ right);
+                  float * __restrict nearZ,
+                  float * __restrict farZ,
+                  float * __restrict top,
+                  float * __restrict bottom,
+                  float * __restrict left,
+                  float * __restrict right);
 
 void
 glmc_persp_decompv(mat4 proj, float dest[6]);
 
 void
 glmc_persp_decomp_x(mat4 proj,
-                    float * /*__restrict*/ left,
-                    float * /*__restrict*/ right);
+                    float * __restrict left,
+                    float * __restrict right);
 
 void
 glmc_persp_decomp_y(mat4 proj,
-                    float * /*__restrict*/ top,
-                    float * /*__restrict*/ bottom);
+                    float * __restrict top,
+                    float * __restrict bottom);
 
 void
 glmc_persp_decomp_z(mat4 proj,
-                    float * /*__restrict*/ nearZ,
-                    float * /*__restrict*/ farZ);
+                    float * __restrict nearZ,
+                    float * __restrict farZ);
 
 void
-glmc_persp_decomp_far(mat4 proj, float * /*__restrict*/ farZ);
+glmc_persp_decomp_far(mat4 proj, float * __restrict farZ);
 
 void
-glmc_persp_decomp_near(mat4 proj, float * /*__restrict*/ nearZ);
+glmc_persp_decomp_near(mat4 proj, float * __restrict nearZ);
 
 float
 glmc_persp_fovy(mat4 proj);
@@ -940,9 +941,8 @@ glmc_persp_sizes(mat4 proj, float fovy, vec4 dest);
 void
 glmc_quat_identity(versor q);
 
-// TODO ?
-//void
-//glmc_quat_identity_array(versor * /*__restrict*/ q, size_t count);
+void
+glmc_quat_identity_array(versor * __restrict q, size_t count);
 
 void
 glmc_quat_init(versor q, float x, float y, float z, float w);
@@ -1172,23 +1172,23 @@ glmc_aabb_sphere(vec3 box[2], vec4 s);
 // TODO
 //void
 //glmc_mat4_print(mat4   matrix,
-//                FILE * /*__restrict*/ ostream);
+//                FILE * __restrict ostream);
 //
 //void
 //glmc_mat3_print(mat3 matrix,
-//                FILE * /*__restrict*/ ostream);
+//                FILE * __restrict ostream);
 //
 //void
 //glmc_vec4_print(vec4 vec,
-//                FILE * /*__restrict*/ ostream);
+//                FILE * __restrict ostream);
 //
 //void
 //glmc_vec3_print(vec3 vec,
-//                FILE * /*__restrict*/ ostream);
+//                FILE * __restrict ostream);
 //
 //void
 //glmc_versor_print(versor vec,
-//                  FILE * /*__restrict*/ ostream);
+//                  FILE * __restrict ostream);
 
 
 // project.h --------------------------------------------------------------------------------------------------------------

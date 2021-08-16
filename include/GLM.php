@@ -135,19 +135,19 @@ class GLM
 	const FAR    = 5 ;
 
 
-	static $typeof_void_p; // TODO renom GLM::$typeof_xxx and GLM::$ffi_typeof_xxx
+	static $ffi_typeof_void_p; 
 
-	static $typeof_vec2;
-	static $typeof_vec3;
-	static $typeof_vec4;
+	static $ffi_typeof_vec2;
+	static $ffi_typeof_vec3;
+	static $ffi_typeof_vec4;
 	
-	static $typeof_mat2;
-	static $typeof_mat3;
-	static $typeof_mat4;
+	static $ffi_typeof_mat2;
+	static $ffi_typeof_mat3;
+	static $ffi_typeof_mat4;
 	
-	static $typeof_aabb;
+	static $ffi_typeof_aabb;
 	
-	static $typeof_quat;
+	static $ffi_typeof_quat;
 
 	//----------------------------------------------------------------------------------
 	// FFI initialisation
@@ -160,19 +160,19 @@ class GLM
 		$cdef = __DIR__ . '/GLM.ffi.php.h';
 		static::$ffi = FFI::load($cdef);
 		
-		static::$typeof_void_p= static::$ffi->type( "void*"  ); // TODO FIXME HACK : find a better way to FFI::type("void");
+		static::$ffi_typeof_void_p= static::$ffi->type( "void*"  ); // TODO FIXME HACK : find a better way to FFI::type("void");
 
-		static::$typeof_vec2  = static::$ffi->type( "vec2"   );
-		static::$typeof_vec3  = static::$ffi->type( "vec3"   );
-		static::$typeof_vec4  = static::$ffi->type( "vec4"   );
+		static::$ffi_typeof_vec2  = static::$ffi->type( "vec2"   );
+		static::$ffi_typeof_vec3  = static::$ffi->type( "vec3"   );
+		static::$ffi_typeof_vec4  = static::$ffi->type( "vec4"   );
 		
-		static::$typeof_mat2  = static::$ffi->type( "mat2"   );
-		static::$typeof_mat3  = static::$ffi->type( "mat3"   );
-		static::$typeof_mat4  = static::$ffi->type( "mat4"   );
+		static::$ffi_typeof_mat2  = static::$ffi->type( "mat2"   );
+		static::$ffi_typeof_mat3  = static::$ffi->type( "mat3"   );
+		static::$ffi_typeof_mat4  = static::$ffi->type( "mat4"   );
 		
-		static::$typeof_aabb  = static::$ffi->type( "Aabb");
+		static::$ffi_typeof_aabb  = static::$ffi->type( "Aabb");
 		
-		static::$typeof_quat  = static::$ffi->type( "versor" ); //!\ "versor" is how cglm calls "quaternion"
+		static::$ffi_typeof_quat  = static::$ffi->type( "versor" ); //!\ "versor" is how cglm calls "quaternion"
 	}
 
 
@@ -193,30 +193,30 @@ class GLM
 			&&
 			get_class( $ffi_ret ) == "FFI\CData"
 			&&
-			FFI::typeof( FFI::addr( $ffi_ret ) ) == static::$typeof_void_p // TODO HACK FIXME : with PHP8.8 I can't find a way to test directly against FFI::type("void");
+			FFI::typeof( FFI::addr( $ffi_ret ) ) == static::$ffi_typeof_void_p // TODO HACK FIXME : with PHP8.8 I can't find a way to test directly against FFI::type("void");
 			;
 	}
 	
 	
-	public static function Vec2( $V ) // TODO renommer en GLM::Vec2($V) and GLM::to_Vec2( $V ) puis utilise GLM::Vec2($A=null) comme alias de Vec2::new($A=null)
+	public static function Vec2( $V ) 
 	{
 		if ( static::is_Vec2( $V ) ) return $V ;
 		
-		return Vec2::new([ $V[0] , $V[1] ]);
+		return Vec2::new( $V );
 	}
 	
-	public static function Vec3( $V , $_z=0.0 ) // TODO renommer en to_Vec3( $V )
+	public static function Vec3( $V , $_z = 0.0 ) 
 	{
 		if ( static::is_Vec3( $V ) ) return $V ;
 		
-		return Vec3::new([ $V[0] , $V[1] , $V[2] ?? $_z ?? 0.0 ]);
+		return Vec3::new( $V , $_z );
 	}
 	
-	public static function Vec4( $V , $_w=1.0 )
+	public static function Vec4( $V , $_w = 1.0 )
 	{
 		if ( static::is_Vec4( $V ) ) return $V ;
 		
-		return Vec4::new([ $V[0] , $V[1] , $V[2] ?? 0.0 , $V[3] ?? $_w ?? 1.0 ]);
+		return Vec4::new( $V , $_w );
 	}
 	
 	public static function Mat2( $M )
@@ -247,11 +247,11 @@ class GLM
 		return Aabb::new( $B );
 	}
 	
-	public static function Quat( $Q )
+	public static function Quat( $Q , $_w = 0.0 )
 	{
 		if ( static::is_Quat( $Q ) ) return $Q ;
 		
-		return Quat::new( $Q );
+		return Quat::new( $Q , $_w );
 	}
 	
 	public static function is_Vec2( $V )
@@ -261,7 +261,7 @@ class GLM
 			&&
 			get_class( $V ) == "FFI\CData"
 			&&
-			FFI::typeof( $V ) == static::$typeof_vec2
+			FFI::typeof( $V ) == static::$ffi_typeof_vec2
 			;
 	}
 	
@@ -272,7 +272,7 @@ class GLM
 			&&
 			get_class( $V ) == "FFI\CData"
 			&&
-			FFI::typeof( $V ) == static::$typeof_vec3
+			FFI::typeof( $V ) == static::$ffi_typeof_vec3
 			;
 	}
 	
@@ -283,7 +283,7 @@ class GLM
 			&&
 			get_class( $V ) == "FFI\CData"
 			&&
-			FFI::typeof( $V ) == static::$typeof_vec4
+			FFI::typeof( $V ) == static::$ffi_typeof_vec4
 			;
 	}
 	
@@ -294,7 +294,7 @@ class GLM
 			&&
 			get_class( $V ) == "FFI\CData"
 			&&
-			FFI::typeof( $V ) == static::$typeof_mat2
+			FFI::typeof( $V ) == static::$ffi_typeof_mat2
 			;
 	}
 	
@@ -305,7 +305,7 @@ class GLM
 			&&
 			get_class( $V ) == "FFI\CData"
 			&&
-			FFI::typeof( $V ) == static::$typeof_mat3
+			FFI::typeof( $V ) == static::$ffi_typeof_mat3
 			;
 	}
 	
@@ -316,7 +316,7 @@ class GLM
 			&&
 			get_class( $V ) == "FFI\CData"
 			&&
-			FFI::typeof( $V ) == static::$typeof_mat4
+			FFI::typeof( $V ) == static::$ffi_typeof_mat4
 			;
 	}
 	
@@ -327,7 +327,7 @@ class GLM
 			&&
 			get_class( $B ) == "FFI\CData"
 			&&
-			FFI::typeof( $B ) == static::$typeof_aabb
+			FFI::typeof( $B ) == static::$ffi_typeof_aabb
 			;
 	}
 	
@@ -338,7 +338,7 @@ class GLM
 			&&
 			get_class( $Q ) == "FFI\CData"
 			&&
-			FFI::typeof( $Q ) == static::$typeof_quat
+			FFI::typeof( $Q ) == static::$ffi_typeof_quat
 			;
 	}
 	
@@ -917,12 +917,26 @@ class Vec2
 	
 	public static function new( $A = null )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("vec2[$A]");
+		}
+		
 		$V = GLM::$ffi->new("vec2");
 		
-		if ( ! empty( $A ) )
+		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
-			$V[0] = $A[0] ?? 0.0 ;
-			$V[1] = $A[1] ?? 0.0 ;
+			switch( count( $A ) )
+			{
+				case 0:
+				case 1:
+					break; // ignore
+				
+				default:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+				break;
+			}
 		}
 		
 		return $V;
@@ -968,15 +982,35 @@ class Vec3
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( $A = null , $_z = 0.0 )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("vec3[$A]");
+		}
+		
 		$V = GLM::$ffi->new("vec3");
 		
-		if ( ! empty( $A ) )
+		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
-			$V[0] = $A[0] ?? 0.0 ;
-			$V[1] = $A[1] ?? 0.0 ;
-			$V[2] = $A[2] ?? 0.0 ;
+			switch( count( $A ) )
+			{
+				case 0:
+				case 1:
+					break; // ignore
+				
+				case 2:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] =     $_z ;
+				break;
+			
+				default:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] = $A[ 2 ] ;
+				break;
+			}
 		}
 		
 		return $V;
@@ -1057,16 +1091,44 @@ class Vec4
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( $A = null , $_w = 1.0 )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("vec4[$A]");
+		}
+		
 		$V = GLM::$ffi->new("vec4");
 		
-		if ( ! empty( $A ) )
+		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
-			$V[0] = $A[0] ?? 0.0 ;
-			$V[1] = $A[1] ?? 0.0 ;
-			$V[2] = $A[2] ?? 0.0 ;
-			$V[3] = $A[3] ?? 1.0 ; // ONE
+			switch( count( $A ) )
+			{
+				case 0:
+				case 1:
+					break; // ignore
+				
+				case 2:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] =     0.0 ;
+					$V[ 3 ] =     $_w ;
+				break;
+				
+				case 3:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] = $A[ 2 ] ;
+					$V[ 3 ] =     $_w ;
+				break;
+			
+				default:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] = $A[ 2 ] ;
+					$V[ 3 ] = $A[ 3 ] ;
+				break;
+			}
 		}
 		
 		return $V;
@@ -1149,15 +1211,24 @@ class Mat2
 	
 	public static function new( $A = null )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("mat2[$A]");
+		}
+		
 		$M = GLM::$ffi->new("mat2");
 		
-		if ( ! empty( $A ) )
+		if ( is_array( $A ) )
 		{
 			$M[0][0] = $A[0][0] ?? $A[0] ?? 0.0 ;
 			$M[0][1] = $A[0][1] ?? $A[1] ?? 0.0 ;
 			
 			$M[1][0] = $A[1][0] ?? $A[2] ?? 0.0 ;
 			$M[1][1] = $A[1][1] ?? $A[3] ?? 0.0 ;
+		}
+		else
+		{
+			error("Mat2::new() : Err, unsupported initialisation parameter.");
 		}
 		
 		return $M;
@@ -1218,9 +1289,14 @@ class Mat3
 	
 	public static function new( $A = null )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("mat3[$A]");
+		}
+		
 		$M = GLM::$ffi->new("mat3");
 		
-		if ( ! empty( $A ) )
+		if ( is_array( $A ) )
 		{
 			$M[0][0] = $A[0][0] ?? $A[0] ?? 0.0 ;
 			$M[0][1] = $A[0][1] ?? $A[1] ?? 0.0 ;
@@ -1233,6 +1309,10 @@ class Mat3
 			$M[2][0] = $A[2][0] ?? $A[6] ?? 0.0 ;
 			$M[2][1] = $A[2][1] ?? $A[7] ?? 0.0 ;
 			$M[2][2] = $A[2][2] ?? $A[8] ?? 0.0 ;
+		}
+		else
+		{
+			error("Mat3::new() : Err, unsupported initialisation parameter.");
 		}
 		
 		return $M;
@@ -1294,9 +1374,14 @@ class Mat4
 	
 	public static function new( $A = null )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("mat4[$A]");
+		}
+		
 		$M = GLM::$ffi->new("mat4");
 		
-		if ( ! empty( $A ) )
+		if ( is_array( $A ) )
 		{
 			$M[0][0] = $A[0][0] ?? $A[0] ?? 0.0 ;
 			$M[0][1] = $A[0][1] ?? $A[1] ?? 0.0 ;
@@ -1318,7 +1403,11 @@ class Mat4
 			$M[3][2] = $A[3][2] ?? $A[14] ?? 0.0 ;
 			$M[3][3] = $A[3][3] ?? $A[15] ?? 0.0 ;
 		}
-		
+		else
+		{
+			error("Mat4::new() : Err, unsupported initialisation parameter.");
+		}
+
 		return $M;
 	}
 	
@@ -1368,27 +1457,26 @@ class Aabb
 		
 		$res = $callable(...$args);
 		
-		//return $res;
-		
-		if ( ! GLM::ffi_returned_void( $res ) ) return $res;
-		
-		// Most time, the last parameter is a destination vector,
-		// so we can return it instead of void.
-		// The exceptions are : TODO
-		// ... 
-		// They will be overriden below. 
-		
-		return $args[ count( $args ) -1 ]; 
+		return $res;
 	}
 	
 	public static function new( $A = null )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("Aabb[$A]");
+		}
+		
 		$B = GLM::$ffi->new("Aabb");
 		
-		if ( is_array( $A ) ) // [ [ Vmin ] , [ Vmax ] ]
+		if ( is_array( $A ) ) // [ Vmin[] , Vmax[] ]
 		{
 			GLM::$ffi->glmc_vec3_copy( $B->min , GLM::Vec3( $A[0] ) );
 			GLM::$ffi->glmc_vec3_copy( $B->max , GLM::Vec3( $A[1] ) );
+		}
+		else
+		{
+			error("Aabb::new() : Err, unsupported initialisation parameter.");
 		}
 		
 		return $B;
@@ -1560,16 +1648,44 @@ class Quat
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( $A = null , $_w = 0.0 )
 	{
+		if ( is_int( $A ) )
+		{
+			return GLM::$ffi->new("versor[$A]");
+		}
+		
 		$V = GLM::$ffi->new("versor"); //!\ 'versor' is the name used by cglm for quaternion
 		
-		if ( ! empty( $A ) )
+		if ( is_countable( $A ) ) // works with both PHP and FFI arrays
 		{
-			$V[0] = $A[0] ?? 0.0 ;
-			$V[1] = $A[1] ?? 0.0 ;
-			$V[2] = $A[2] ?? 0.0 ;
-			$V[3] = $A[3] ?? 0.0 ; // ZERO
+			switch( count( $A ) )
+			{
+				case 0:
+				case 1:
+					break; // ignore
+				
+				case 2:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] =     0.0 ;
+					$V[ 3 ] =     $_w ;
+				break;
+				
+				case 3:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] = $A[ 2 ] ;
+					$V[ 3 ] =     $_w ;
+				break;
+			
+				default:
+					$V[ 0 ] = $A[ 0 ] ;
+					$V[ 1 ] = $A[ 1 ] ;
+					$V[ 2 ] = $A[ 2 ] ;
+					$V[ 3 ] = $A[ 3 ] ;
+				break;
+			}
 		}
 		
 		return $V;
