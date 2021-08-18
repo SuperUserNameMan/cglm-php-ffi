@@ -9,6 +9,12 @@ Tested with PHP-cli 8.0.x under Linux.
 - if required, it is possible to override a C function by adding a ` public static function ` with the same name into the class. This can be used to simply the C API and the usage of FFI with some functions that requires pointers.
 - helpers can be added to the ` GLM:: ` API.
 
+## /!\ Performance :
+
+Using the ` __staticCall ` encapsulation method makes life easier, but it represents a great loss of performance.
+
+If high perf are required, I recommand using ` GLM::$ffi->glmc_xxxxx() ` direct calls.
+
 ## TODO :
 
 - add some helpers that would make the API easier to use in PHP ...
