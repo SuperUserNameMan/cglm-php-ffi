@@ -219,9 +219,7 @@ class GLM
 	public static function ffi_returned_void( mixed $ffi_ret ) : bool
 	{
 		return 
-			is_object( $ffi_ret )
-			&&
-			get_class( $ffi_ret ) == "FFI\CData"
+			$ffi_ret instanceof FFI\CData
 			&&
 			FFI::typeof( FFI::addr( $ffi_ret ) ) == static::$ffi_typeof_void_p // TODO HACK FIXME : with PHP8.8 I can't find a way to test directly against FFI::type("void");
 			;
@@ -287,9 +285,7 @@ class GLM
 	public static function is_Vec2( mixed $V ) : bool
 	{
 		return
-			is_object( $V )
-			&&
-			get_class( $V ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $V ) == static::$ffi_typeof_vec2
 			;
@@ -298,9 +294,7 @@ class GLM
 	public static function is_Vec3( mixed $V ) : bool
 	{
 		return
-			is_object( $V )
-			&&
-			get_class( $V ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $V ) == static::$ffi_typeof_vec3
 			;
@@ -309,9 +303,7 @@ class GLM
 	public static function is_Vec4( mixed $V ) : bool
 	{
 		return
-			is_object( $V )
-			&&
-			get_class( $V ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $V ) == static::$ffi_typeof_vec4
 			;
@@ -320,9 +312,7 @@ class GLM
 	public static function is_Mat2( mixed $V ) : bool
 	{
 		return
-			is_object( $V )
-			&&
-			get_class( $V ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $V ) == static::$ffi_typeof_mat2
 			;
@@ -331,9 +321,7 @@ class GLM
 	public static function is_Mat3( mixed $V ) : bool
 	{
 		return
-			is_object( $V )
-			&&
-			get_class( $V ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $V ) == static::$ffi_typeof_mat3
 			;
@@ -342,9 +330,7 @@ class GLM
 	public static function is_Mat4( mixed $V ) : bool
 	{
 		return
-			is_object( $V )
-			&&
-			get_class( $V ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $V ) == static::$ffi_typeof_mat4
 			;
@@ -353,9 +339,7 @@ class GLM
 	public static function is_Aabb( mixed $B ) : bool
 	{
 		return
-			is_object( $B )
-			&&
-			get_class( $B ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $B ) == static::$ffi_typeof_aabb
 			;
@@ -364,9 +348,7 @@ class GLM
 	public static function is_Quat( mixed $Q ) : bool
 	{
 		return
-			is_object( $Q )
-			&&
-			get_class( $Q ) == "FFI\CData"
+			$V instanceof FFI\CData
 			&&
 			FFI::typeof( $Q ) == static::$ffi_typeof_quat
 			;
