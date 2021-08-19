@@ -206,7 +206,7 @@ class GLM
 	}
 
 
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [static::$ffi, 'glmc_'.$method];
 		return $callable(...$args);
@@ -216,7 +216,7 @@ class GLM
 	// Helpers
 	//----------------------------------------------------------------------------------
 	
-	public static function ffi_returned_void( $ffi_ret )
+	public static function ffi_returned_void( mixed $ffi_ret )
 	{
 		return 
 			is_object( $ffi_ret )
@@ -228,63 +228,63 @@ class GLM
 	}
 	
 	
-	public static function Vec2( $V ) 
+	public static function Vec2( object|array|int $V ) 
 	{
 		if ( static::is_Vec2( $V ) ) return $V ;
 		
 		return Vec2::new( $V );
 	}
 	
-	public static function Vec3( $V , $_z = 0.0 ) 
+	public static function Vec3( object|array|int $V , float $_z = 0.0 ) 
 	{
 		if ( static::is_Vec3( $V ) ) return $V ;
 		
 		return Vec3::new( $V , $_z );
 	}
 	
-	public static function Vec4( $V , $_w = 1.0 )
+	public static function Vec4( object|array|int $V , float $_w = 1.0 )
 	{
 		if ( static::is_Vec4( $V ) ) return $V ;
 		
 		return Vec4::new( $V , $_w );
 	}
 	
-	public static function Mat2( $M )
+	public static function Mat2( object|array|int $M )
 	{
 		if ( static::is_Mat2( $M ) ) return $M ;
 		
 		return Mat2::new( $M );
 	}
 	
-	public static function Mat3( $M )
+	public static function Mat3( object|array|int $M )
 	{
 		if ( static::is_Mat3( $M ) ) return $M ;
 		
 		return Mat3::new( $M );
 	}
 	
-	public static function Mat4( $M )
+	public static function Mat4( object|array|int $M )
 	{
 		if ( static::is_Mat4( $M ) ) return $M ;
 		
 		return Mat4::new( $M );
 	}
 	
-	public static function Aabb( $B )
+	public static function Aabb( object|array|int $B )
 	{
 		if ( static::is_Aabb( $B ) ) return $B ;
 		
 		return Aabb::new( $B );
 	}
 	
-	public static function Quat( $Q , $_w = 0.0 )
+	public static function Quat( object|array|int $Q , float $_w = 0.0 )
 	{
 		if ( static::is_Quat( $Q ) ) return $Q ;
 		
 		return Quat::new( $Q , $_w );
 	}
 	
-	public static function is_Vec2( $V )
+	public static function is_Vec2( mixed $V )
 	{
 		return
 			is_object( $V )
@@ -295,7 +295,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Vec3( $V )
+	public static function is_Vec3( mixed $V )
 	{
 		return
 			is_object( $V )
@@ -306,7 +306,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Vec4( $V )
+	public static function is_Vec4( mixed $V )
 	{
 		return
 			is_object( $V )
@@ -317,7 +317,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Mat2( $V )
+	public static function is_Mat2( mixed $V )
 	{
 		return
 			is_object( $V )
@@ -328,7 +328,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Mat3( $V )
+	public static function is_Mat3( mixed $V )
 	{
 		return
 			is_object( $V )
@@ -339,7 +339,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Mat4( $V )
+	public static function is_Mat4( mixed $V )
 	{
 		return
 			is_object( $V )
@@ -350,7 +350,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Aabb( $B )
+	public static function is_Aabb( mixed $B )
 	{
 		return
 			is_object( $B )
@@ -361,7 +361,7 @@ class GLM
 			;
 	}
 	
-	public static function is_Quat( $Q )
+	public static function is_Quat( mixed $Q )
 	{
 		return
 			is_object( $Q )
@@ -375,9 +375,8 @@ class GLM
 	
 	// affine.h --------------------------------
 	
-	public static function translate_make( $M , $V )
+	public static function translate_make( object $M , object|array $V )
 	{
-		$M = static::Mat4( $M );
 		$V = static::Vec3( $V );
 		
 		static::$ffi->glmc_translate_make( $M , $V );
@@ -385,16 +384,17 @@ class GLM
 		return $M;
 	}
 	
-	public static function translate_to( $M , $V , $D )
+	public static function translate_to( object $M , object|array $V , object $D=null )
 	{
 		$V = static::Vec3( $V );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_translate_to( $M , $V , $D );
 		
 		return $D;
 	}
 
-	public static function translate( $M , $V )
+	public static function translate( object $M , object|array $V )
 	{
 		$V = static::Vec3( $V );
 		
@@ -403,21 +403,21 @@ class GLM
 		return $M;
 	}
 
-	public static function translate_x( $M , float $x )
+	public static function translate_x( object $M , float $x )
 	{	
 		static::$ffi->glmc_translate_x( $M , $x );
 		
 		return $M;
 	}
 	
-	public static function translate_y( $M , float $y )
+	public static function translate_y( object $M , float $y )
 	{	
 		static::$ffi->glmc_translate_y( $M , $y );
 		
 		return $M;
 	}
 	
-	public static function translate_z( $M , float $z )
+	public static function translate_z( object $M , float $z )
 	{	
 		static::$ffi->glmc_translate_x( $M , $z );
 		
@@ -425,7 +425,7 @@ class GLM
 	}
 	
 	
-	public static function scale_make( $M , $V )
+	public static function scale_make( object $M , object|array $V )
 	{
 		$M = static::Mat4( $M );		
 		$V = static::Vec3( $V );
@@ -435,16 +435,17 @@ class GLM
 		return $M;
 	}
 	
-	public static function scale_to( $M , $V , $D )
+	public static function scale_to( object $M , object|array $V , object $D=null )
 	{
 		$V = static::Vec3( $V );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_scale_to( $M , $V , $D );
 		
 		return $D;
 	}
 
-	public static function scale( $M , $V )
+	public static function scale( object $M , object|array $V )
 	{
 		$V = static::Vec3( $V );
 		
@@ -453,43 +454,42 @@ class GLM
 		return $M;
 	}
 
-	public static function scale_uni( $M , float $s )
+	public static function scale_uni( object $M , float $s )
 	{	
 		static::$ffi->glmc_scale_uni( $M , $s );
 		
 		return $M;
 	}
 	
-	public static function rotate_x( $M , float $rad , $D = null )
+	public static function rotate_x( object $M , float $rad , object $D = null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_rotate_x( $M, $rad, $D );
 		
 		return $D;
 	}
 	
-	public static function rotate_y( $M , float $rad , $D = null )
+	public static function rotate_y( object $M , float $rad , object $D = null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_rotate_y( $M, $rad, $D );
 		
 		return $D;
 	}
 	
-	public static function rotate_z( $M , float $rad , $D = null )
+	public static function rotate_z( object $M , float $rad , object $D = null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_rotate_z( $M, $rad, $D );
 		
 		return $D;
 	}
 
-	public static function rotate_make( $M , float $angle , $V_axis )
+	public static function rotate_make( object $M , float $angle , object|array $V_axis )
 	{
-		$M = static::Mat4( $M );
 		$V_axis = static::Vec3( $V_axis );
 		
 		static::$ffi->glmc_rotate_make( $M , $angle, $V_axis );
@@ -497,7 +497,7 @@ class GLM
 		return $M;
 	}
 	
-	public static function rotate( $M , float $angle , $V_axis )
+	public static function rotate( object $M , float $angle , object|array $V_axis )
 	{
 		$V_axis = static::Vec3( $V_axis );
 		
@@ -506,7 +506,7 @@ class GLM
 		return $M;
 	}
 
-	public static function rotate_at( $M , $V_pivot , float $angle , $V_axis )
+	public static function rotate_at( object $M , object|array $V_pivot , float $angle , object|array $V_axis )
 	{
 		$V_pivot = static::Vec3( $V_pivot );
 		$V_axis  = static::Vec3( $V_axis  );
@@ -516,7 +516,7 @@ class GLM
 		return $M;
 	}
 	
-	public static function decompose_scalev( $M , $V = null )
+	public static function decompose_scalev( object $M , object|array $V = null )
 	{
 		$V = static::Vec3( $V );
 		
@@ -525,7 +525,7 @@ class GLM
 		return $V;
 	}
 	
-	public static function decompose_rs( $M , $R = null , $V = null )
+	public static function decompose_rs( object $M , object $R = null , object $V = null )
 	{
 		$R = static::Mat4( $R );
 		$V = static::Vec3( $V );
@@ -535,7 +535,7 @@ class GLM
 		return [ $R , $V ]; //!\\
 	}
 
-	public static function decompose( $M , $V_t=null , $R=null , $V_s=null )
+	public static function decompose( object $M , object $V_t=null , object $R=null , object $V_s=null )
 	{
 		$V_t = static::Vec3( $V_t );
 		$V_s = static::Vec3( $V_s );
@@ -546,25 +546,25 @@ class GLM
 		return [ $V_t , $R , $V_s ];
 	}
 	
-	public static function mul( $M1 , $M2 , $D=null )
+	public static function mul( object $M1 , object $M2 , object $D=null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_mul( $M1 , $M2 , $D );
 		
 		return $D;
 	}
 	
-	public static function mul_rot( $M1 , $M2 , $D=null )
+	public static function mul_rot( object $M1 , object $M2 , object $D=null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_mul_rot( $M1 , $M2 , $D );
 		
 		return $D;
 	}
 	
-	public static function inv_tr( $M )
+	public static function inv_tr( object $M )
 	{
 		static::$ffi->glmc_inv_tr( $M );
 		
@@ -591,129 +591,125 @@ class GLM
 		return $D;
 	}
 	
-	public static function ortho_aabb( $B , $D=null )
+	public static function ortho_aabb( object|array $B , object $D=null )
 	{
 		$B = static::Aabb( $B );
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_ortho_aabb( $B->v , $D );
 		
 		return $D;
 	}
 	
-	public static function ortho_aabb_p( $B , float $padding , $D=null )
+	public static function ortho_aabb_p( object|array $B , float $padding , object $D=null )
 	{
 		$B = static::Aabb( $B );
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_ortho_aabb_p( $B->v , $padding , $D );
 		
 		return $D;
 	}
 	
-	public static function ortho_aabb_pz( $B , float $padding , $D=null )
+	public static function ortho_aabb_pz( object|array $B , float $padding , object $D=null )
 	{
 		$B = static::Aabb( $B );
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_ortho_aabb_pz( $B->v , $padding , $D );
 		
 		return $D;
 	}
 	
-	public static function ortho_default( float $aspect , $D=null )
+	public static function ortho_default( float $aspect , object $D=null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_ortho_default( $aspect , $D );
 		
 		return $D;
 	}
 	
-	public static function ortho_default_s( float $aspect , float $size , $D=null )
+	public static function ortho_default_s( float $aspect , float $size , object $D=null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_ortho_default_s( $aspect , $size , $D );
 		
 		return $D;
 	}
 	
-	public static function perspective( float $fovy , float $aspect , float $nearZ , float $farZ , $D=null )
+	public static function perspective( float $fovy , float $aspect , float $nearZ , float $farZ , object $D=null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_perspective( $fovy , $aspect , $nearZ , $farZ , $D );
 		
 		return $D;
 	}
 	
-	public static function persp_move_far( $P , float $deltaFar )
-	{
-		$P = static::Mat4( $P );
-		
+	public static function persp_move_far( object $P , float $deltaFar )
+	{	
 		static::$ffi->glmc_persp_move_far( $P , deltaFar );
 		
 		return $P;
 	}
 	
-	public static function perspective_default( float $aspect , $D=null )
+	public static function perspective_default( float $aspect , object $D=null )
 	{
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_perspective_default( $aspect , $D );
 		
 		return $D;
 	}
 	
-	public static function perspective_resize( $P , float $aspect )
-	{
-		$P = static::Mat4( $P );
-		
+	public static function perspective_resize( object $P , float $aspect )
+	{		
 		static::$ffi->glmc_perspective_resize( $aspect , $P ); //!\ C params inverted
 		
 		return $P;
 	}
 	
-	public static function lookat( $V_eye , $V_center , $V_up , $D=null )
+	public static function lookat( object|array $V_eye , object|array  $V_center , object|array $V_up , object $D=null )
 	{
 		$V_eye    = static::Vec3( $V_eye    );
 		$V_center = static::Vec3( $V_center );
 		$V_up     = static::Vec3( $V_up     );
 		
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_lookat( $V_eye , $V_center , $V_up , $D );
 		
 		return $D;
 	}
 	
-	public static function look( $V_eye , $V_dir , $V_up , $D=null )
+	public static function look( object|array $V_eye , object|array $V_dir , object|array $V_up , object $D=null )
 	{
 		$V_eye = static::Vec3( $V_eye );
 		$V_dir = static::Vec3( $V_dir );
 		$V_up  = static::Vec3( $V_up  );
 		
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_look( $V_eye , $V_dir , $V_up , $D );
 		
 		return $D;
 	}
 	
-	public static function look_anyup( $V_eye , $V_dir , $D=null )
+	public static function look_anyup( object|array $V_eye , object|array $V_dir , object $D=null )
 	{
 		$V_eye = static::Vec3( $V_eye );
 		$V_dir = static::Vec3( $V_dir );
 		
-		$D = static::Mat4( $D );
+		$D ??= static::Mat4();
 		
 		static::$ffi->glmc_look_anyup( $V_eye , $V_dir , $D );
 		
 		return $D;
 	}
 	
-	public static function persp_decomp( $P )
+	public static function persp_decomp( object $P )
 	{
 		$f = static::$ffi->new( static::$ffi_typeof_FrustumPlanes );
 		
@@ -729,7 +725,7 @@ class GLM
 		return $f;
 	}
 	
-	public static function persp_decomp_x( $P )
+	public static function persp_decomp_x( object $P )
 	{
 		$f = static::$ffi->new( static::$ffi_typeof_struct_LR_Planes );
 		
@@ -741,7 +737,7 @@ class GLM
 		return $f;
 	}
 	
-	public static function persp_decomp_y( $P )
+	public static function persp_decomp_y( object $P )
 	{
 		$f = static::$ffi->new( static::$ffi_typeof_struct_TB_Planes );
 		
@@ -753,7 +749,7 @@ class GLM
 		return $f;
 	}
 	
-	public static function persp_decomp_z( $P )
+	public static function persp_decomp_z( object $P )
 	{
 		$f = static::$ffi->new( static::$ffi_typeof_struct_NF_Planes );
 		
@@ -765,7 +761,7 @@ class GLM
 		return $f;
 	}
 	
-	public static function persp_decomp_far( $P )
+	public static function persp_decomp_far( object $P )
 	{
 		$f = static::$ffi->new("float[1]");
 		
@@ -774,7 +770,7 @@ class GLM
 		return $f[0];
 	}
 	
-	public static function persp_decomp_near( $P )
+	public static function persp_decomp_near( object $P )
 	{
 		$f = static::$ffi->new("float[1]");
 		
@@ -794,7 +790,7 @@ class GLM
 	
 	// euler.h ---------------------------------------------------------
 	
-	public static function euler_angles( $M , $V )
+	public static function euler_angles( object $M , object|array $V )
 	{
 		$V = static::Vec3( $V );
 		
@@ -803,7 +799,7 @@ class GLM
 		return $V;
 	}
 	
-	public static function euler( $V , $M )
+	public static function euler( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );
 		
@@ -812,42 +808,42 @@ class GLM
 		return $M;
 	}
 	
-	public static function euler_xyz( $V , $M )
+	public static function euler_xyz( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );	
 		static::$ffi->glmc_euler_xyz( $V , $M );
 		return $M;
 	}
 	
-	public static function euler_zyx( $V , $M )
+	public static function euler_zyx( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );
 		static::$ffi->glmc_euler_zyx( $V , $M );
 		return $M;
 	}
 	
-	public static function euler_zxy( $V , $M )
+	public static function euler_zxy( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );	
 		static::$ffi->glmc_euler_zxy( $V , $M );
 		return $M;
 	}
 	
-	public static function euler_xzy( $V , $M )
+	public static function euler_xzy( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );	
 		static::$ffi->glmc_euler_xzy( $V , $M );
 		return $M;
 	}
 	
-	public static function euler_yzx( $V , $M )
+	public static function euler_yzx( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );	
 		static::$ffi->glmc_euler_yzx( $V , $M );
 		return $M;
 	}
 	
-	public static function euler_yxz( $V , $M )
+	public static function euler_yxz( object|array $V , object $M )
 	{
 		$M = static::Mat4( $M );	
 		static::$ffi->glmc_euler_yxz( $V , $M );
@@ -870,31 +866,25 @@ class GLM
 		return static::$ffi->new( static::$ffi_typeof_PlaneCorners );
 	}
 	
-	public static function frustum_planes( $M , $Planes=null )
+	public static function frustum_planes( object $M , object $Planes=null )
 	{
-		if ( $Planes === null )
-		{
-			$Planes = static::FrustumPlanes();
-		}
+		$Planes ??= static::FrustumPlanes();
 		
 		static::$ffi->glmc_frustum_planes( $M , $Planes->v );
 		
 		return $Planes;
 	}
 	
-	public static function frustum_corners( $M , $Corners=null )
+	public static function frustum_corners( object $M , object $Corners=null )
 	{
-		if ( $Corners === null )
-		{
-			$Corners = static::FrustumCorners();
-		}
+		$Corners ??= static::FrustumCorners();
 		
 		static::$ffi->glmc_frustum_corners( $M , $Corners->v );
 		
 		return $Corners;
 	}
 	
-	public static function frustum_center( $Corners , $V_dest=null )
+	public static function frustum_center( object $Corners , object $V_dest=null )
 	{
 		$V_dest = static::Vec4( $V_dest );
 		
@@ -903,7 +893,7 @@ class GLM
 		return $V_dest;
 	}
 	
-	public static function frustum_box( $Corners , $M , $Aabb )
+	public static function frustum_box( object $Corners , object $M , object|array $Aabb )
 	{
 		$Aabb = GLM::Aabb( $Aabb );
 		
@@ -912,7 +902,7 @@ class GLM
 		return $Aabb;
 	}
 	
-	public static function frustum_corners_at( $Corners_f , float $splitDist , float $farDist , $Corners_p=null )
+	public static function frustum_corners_at( object $Corners_f , float $splitDist , float $farDist , object $Corners_p=null )
 	{
 		if ( $Corners_p === null )
 		{
@@ -927,7 +917,7 @@ class GLM
 
 class Vec2
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_vec2_'.$method];
 		
@@ -945,7 +935,7 @@ class Vec2
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( object|array|int $A = null )
 	{
 		if ( is_int( $A ) )
 		{
@@ -972,14 +962,14 @@ class Vec2
 		return $V;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_vec2 );
 		GLM::$ffi->glmc_vec2_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function clamp( $V , float $minval , float $maxval )
+	public static function clamp( object $V , float $minval , float $maxval )
 	{
 		// See __callStatic for the reason why it is overriden.
 		
@@ -991,7 +981,7 @@ class Vec2
 
 class Vec3
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_vec3_'.$method];
 		
@@ -1012,7 +1002,7 @@ class Vec3
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null , $_z = 0.0 )
+	public static function new( object|array|int $A = null , float $_z = 0.0 )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1046,14 +1036,14 @@ class Vec3
 		return $V;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		GLM::$ffi->glmc_vec3_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function clamp( $V , float $minval , float $maxval )
+	public static function clamp( object $V , float $minval , float $maxval )
 	{
 		// See __callStatic for the reason why it is overriden.
 		
@@ -1062,7 +1052,7 @@ class Vec3
 		return $V;
 	}
 	
-	public static function rotate( $V , float $angle , $V_axis )
+	public static function rotate( object $V , float $angle , $V_axis )
 	{
 		// See __callStatic for the reason why it is overriden.
 		
@@ -1071,7 +1061,7 @@ class Vec3
 		return $V;
 	}
 	
-	public static function fill( $V , float $val )
+	public static function fill( object $V , float $val )
 	{
 		// See __callStatic for the reason why it is overriden.
 		
@@ -1082,7 +1072,7 @@ class Vec3
 	
 	
 	//CGLM_INLINE
-	public static function mix( $V_from , $V_to , float $t , $V_dest )
+	public static function mix( object $V_from , object $V_to , float $t , object $V_dest )
 	{
 		GLM::$ffi->glmc_vec3_lerp( $V_from , $V_to , $t , $V_dest );
 		
@@ -1090,7 +1080,7 @@ class Vec3
 	}
 	
 	//CGLM_INLINE
-	public static function mixc( $V_from , $V_to , float $t , $V_dest )
+	public static function mixc( object $V_from , object $V_to , float $t , object $V_dest )
 	{
 		GLM::$ffi->glmc_vec3_lerpc( $V_from , $V_to , $t , $V_dest );
 		
@@ -1099,28 +1089,28 @@ class Vec3
 	
 	// ----------------- overrides --------------------------------
 	
-	public static function add( $A , $B , $D=null )
+	public static function add( object $A , object $B , object $D=null )
 	{
 		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		GLM::$ffi->glmc_vec3_add( $A , $B , $D );
 		return $D;
 	}
 	
-	public static function sub( $A , $B , $D=null )
+	public static function sub( object $A , object $B , object $D=null )
 	{
 		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		GLM::$ffi->glmc_vec3_sub( $A , $B , $D );
 		return $D;
 	}
 	
-	public static function adds( $A , float $s , $D=null )
+	public static function adds( object $A , float $s , object $D=null )
 	{
 		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		GLM::$ffi->glmc_vec3_adds( $A , $s , $D );
 		return $D;
 	}
 	
-	public static function subs( $A , float $s , $D=null )
+	public static function subs( object $A , float $s , object $D=null )
 	{
 		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
 		GLM::$ffi->glmc_vec3_subs( $A , $s , $D );
@@ -1134,7 +1124,7 @@ class Vec3
 
 class Vec4
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_vec4_'.$method];
 		
@@ -1154,7 +1144,7 @@ class Vec4
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null , $_w = 1.0 )
+	public static function new( object|array|int $A = null , float $_w = 1.0 )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1197,14 +1187,14 @@ class Vec4
 		return $V;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_vec4 );
 		GLM::$ffi->glmc_vec4_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function clamp( $V , float $minval , float $maxval )
+	public static function clamp( object $V , float $minval , float $maxval )
 	{
 		// See __callStatic for the reason why it is overriden.
 		
@@ -1213,7 +1203,7 @@ class Vec4
 		return $V;
 	}
 	
-	public static function fill( $V , float $val )
+	public static function fill( object $V , float $val )
 	{
 		// See __callStatic for the reason why it is overriden.
 		
@@ -1223,7 +1213,7 @@ class Vec4
 	}
 	
 	//CGLM_INLINE
-	public static function mix( $V_from , $V_to , float $t , $V_dest )
+	public static function mix( object $V_from , object $V_to , float $t , object $V_dest )
 	{
 		GLM::$ffi->glmc_vec4_lerp( $V_from , $V_to , $t , $V_dest );
 		
@@ -1231,7 +1221,7 @@ class Vec4
 	}
 	
 	//CGLM_INLINE
-	public static function mixc( $V_from , $V_to , float $t , $V_dest )
+	public static function mixc( object $V_from , object $V_to , float $t , object $V_dest )
 	{
 		GLM::$ffi->glmc_vec4_lerpc( $V_from , $V_to , $t , $V_dest );
 		
@@ -1240,7 +1230,7 @@ class Vec4
 	
 	// plane.h ---------------------------------------------------------
 	
-	public static function plane_normalize( $V )
+	public static function plane_normalize( object $V )
 	{
 		GLM::$ffi->glmc_plane_normalize( $V );
 		return $V;
@@ -1251,7 +1241,7 @@ class Vec4
 
 class Mat2
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_mat2_'.$method];
 		
@@ -1272,7 +1262,7 @@ class Mat2
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( object|array|int $A = null )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1298,28 +1288,28 @@ class Mat2
 		return $M;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_mat2 );
 		GLM::$ffi->glmc_mat2_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function scale( $M , float $s )
+	public static function scale( object $M , float $s )
 	{
 		GLM::$ffi->glmc_mat2_scale( $M , $s );
 		
 		return $M;
 	}
 	
-	public static function swap_col( $M , int $col1, int $col2 )
+	public static function swap_col( object $M , int $col1, int $col2 )
 	{
 		GLM::$ffi->glmc_mat2_swap_col( $M , $col1 , $col2 );
 		
 		return $M;
 	}
 	
-	public static function swap_row( $M, int $row1 , int $row2 )
+	public static function swap_row( object $M, int $row1 , int $row2 )
 	{
 		GLM::$ffi->glmc_mat2_swap_row( $M , $row1 , $row2 );
 		
@@ -1330,7 +1320,7 @@ class Mat2
 
 class Mat3
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_mat3_'.$method];
 		
@@ -1351,7 +1341,7 @@ class Mat3
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( object|array|int $A = null )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1383,28 +1373,28 @@ class Mat3
 		return $M;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_mat3 );
 		GLM::$ffi->glmc_mat3_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function scale( $M , float $s )
+	public static function scale( object $M , float $s )
 	{
 		GLM::$ffi->glmc_mat3_scale( $M , $s );
 		
 		return $M;
 	}
 	
-	public static function swap_col( $M , int $col1, int $col2 )
+	public static function swap_col( object $M , int $col1, int $col2 )
 	{
 		GLM::$ffi->glmc_mat3_swap_col( $M , $col1 , $col2 );
 		
 		return $M;
 	}
 	
-	public static function swap_row( $M, int $row1 , int $row2 )
+	public static function swap_row( object $M, int $row1 , int $row2 )
 	{
 		GLM::$ffi->glmc_mat3_swap_row( $M , $row1 , $row2 );
 		
@@ -1415,7 +1405,7 @@ class Mat3
 
 class Mat4
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_mat4_'.$method];
 		
@@ -1437,7 +1427,7 @@ class Mat4
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null )
+	public static function new( object|array|int $A = null )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1477,35 +1467,35 @@ class Mat4
 		return $M;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_mat4 );
 		GLM::$ffi->glmc_mat3_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function scale( $M , float $s )
+	public static function scale( object $M , float $s )
 	{
 		GLM::$ffi->glmc_mat4_scale( $M , $s );
 		
 		return $M;
 	}
 	
-	public static function scale_p( $M , float $s )
+	public static function scale_p( object $M , float $s )
 	{
 		GLM::$ffi->glmc_mat4_scale_p( $M , $s );
 		
 		return $M;
 	}
 	
-	public static function swap_col( $M , int $col1, int $col2 )
+	public static function swap_col( object $M , int $col1, int $col2 )
 	{
 		GLM::$ffi->glmc_mat4_swap_col( $M , $col1 , $col2 );
 		
 		return $M;
 	}
 	
-	public static function swap_row( $M, int $row1 , int $row2 )
+	public static function swap_row( object $M, int $row1 , int $row2 )
 	{
 		GLM::$ffi->glmc_mat4_swap_row( $M , $row1 , $row2 );
 		
@@ -1517,7 +1507,7 @@ class Mat4
 
 class Aabb
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_aabb_'.$method];
 		
@@ -1526,7 +1516,7 @@ class Aabb
 		return $res;
 	}
 	
-	public static function new( $A = null )
+	public static function new( object|array|int $A = null )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1548,7 +1538,7 @@ class Aabb
 		return $B;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_aabb );
 		GLM::$ffi->glmc_vec3_copy( $A->min , $D->min );
@@ -1556,9 +1546,8 @@ class Aabb
 		return $D;
 	}
 	
-	public static function transform( $A , $M , $D=null )
+	public static function transform( object $A , object $M , object $D=null )
 	{
-		$A = GLM::Aabb( $A );
 		$D = GLM::Aabb( $D );
 		
 		GLM::$ffi->glmc_aabb_transform( $A->v , $M , $D->v );
@@ -1566,10 +1555,8 @@ class Aabb
 		return $D;
 	}
 	
-	public static function merge( $A , $B , $D=null )
+	public static function merge( object $A , object $B , object $D=null )
 	{
-		$A = GLM::Aabb( $A );
-		$B = GLM::Aabb( $B );
 		$D = GLM::Aabb( $D );
 		
 		GLM::$ffi->glmc_aabb_merge( $A->v , $B->v , $D->v );
@@ -1577,10 +1564,8 @@ class Aabb
 		return $D;
 	}
 	
-	public static function crop( $A , $B , $D=null )
+	public static function crop( object $A , object $B , object $D=null )
 	{
-		$A = GLM::Aabb( $A );
-		$B = GLM::Aabb( $B );
 		$D = GLM::Aabb( $D );
 		
 		GLM::$ffi->glmc_aabb_crop( $A->v , $B->v , $D->v );
@@ -1588,11 +1573,8 @@ class Aabb
 		return $D;
 	}
 	
-	public static function crop_until( $A , $B , $C , $D=null )
+	public static function crop_until( object $A , object $B , object $C , object $D=null )
 	{
-		$A = GLM::Aabb( $A );
-		$B = GLM::Aabb( $B );
-		$C = GLM::Aabb( $C );
 		$D = GLM::Aabb( $D );
 		
 		GLM::$ffi->glmc_aabb_crop( $A->v , $B->v , $C->v , $D->v );
@@ -1600,15 +1582,14 @@ class Aabb
 		return $D;
 	}
 	
-	public static function frustum( $A , $Planes=null )
+	public static function frustum( object $A , object $Planes=null )
 	{
-		$A = GLM::Aabb( $A );
 		$Planes = GLM::FrustumPlanes( $Planes );
 		
 		return GLM::$ffi->glmc_aabb_frustum( $A->v , $Planes->v );
 	}
 	
-	public static function invalidate( $A = null )
+	public static function invalidate( object $A = null )
 	{
 		$A = GLM::Aabb( $A );
 		
@@ -1617,30 +1598,23 @@ class Aabb
 		return $A;
 	}
 	
-	public static function isvalid( $A )
-	{
-		$A = GLM::Aabb( $A );
-		
+	public static function isvalid( object $A )
+	{	
 		return GLM::$ffi->glmc_aabb_isvalid( $A->v );
 	}
 	
-	public static function size( $A )
+	public static function size( object $A )
 	{
-		$A = GLM::Aabb( $A );
-		
 		return GLM::$ffi->glmc_aabb_size( $A->v );
 	}
 	
-	public static function radius( $A )
+	public static function radius( object $A )
 	{
-		$A = GLM::Aabb( $A );
-		
 		return GLM::$ffi->glmc_aabb_radius( $A->v );
 	}
 	
-	public static function center( $A , $D=null )
+	public static function center( object $A , object $D=null )
 	{
-		$A = GLM::Aabb( $A );
 		$D = GLM::Vec3( $D );
 		
 		GLM::$ffi->glmc_aabb_center( $A->v , $D );
@@ -1648,38 +1622,30 @@ class Aabb
 		return $D;
 	}
 	
-	public static function aabb( $A , $B )
+	public static function aabb( object $A , object $B )
 	{
-		$A = GLM::Aabb( $A );
-		$B = GLM::Aabb( $B );
-		
 		return GLM::$ffi->glmc_aabb_aabb( $A->v , $B->v );
 	}
 	
-	public static function point( $A , $P )
+	public static function point( object $A , object|array $P )
 	{
-		$A = GLM::Aabb( $A );
 		$P = GLM::Vec3( $P );
 		
 		return GLM::$ffi->glmc_aabb_point( $A->v , $P );
 	}
 	
-	public static function contains( $A , $B )
-	{
-		$A = GLM::Aabb( $A );
-		$B = GLM::Aabb( $B );
-		
+	public static function contains( object $A , object $B )
+	{		
 		return GLM::$ffi->glmc_aabb_contains( $A->v , $B->v );
 	}
 	
-	public static function sphere( $A , $S , $rad=null )
+	public static function sphere( object $A , object|array $S , float $_rad=null )
 	{
-		$A = GLM::Aabb( $A );
-		$S = GLM::Vec4( $S , $rad ); 
+		$S = GLM::Vec4( $S , $_rad ); 
 		
 		// Note : 
-		// - if count( $S ) == 4, then, $rad will be ignored.
-		// - if count( $S ) < 4 and $rad is null, Vec4() will set it to default 1.0
+		// - if count( $S ) == 4, then, $_rad will be ignored.
+		// - if count( $S ) < 4 and $_rad is null, Vec4() will set it to default 1.0
 		
 		return GLM::$ffi->glmc_aabb_sphere( $A->v , $S );
 	}
@@ -1690,7 +1656,7 @@ class Aabb
 
 class Quat
 {
-	public static function __callStatic( $method , $args )
+	public static function __callStatic( string $method , array $args )
 	{
 		$callable = [GLM::$ffi, 'glmc_quat_'.$method];
 		
@@ -1714,7 +1680,7 @@ class Quat
 		return $args[ count( $args ) -1 ]; 
 	}
 	
-	public static function new( $A = null , $_w = 0.0 )
+	public static function new( object|array|int $A = null , float $_w = 0.0 )
 	{
 		if ( is_int( $A ) )
 		{
@@ -1757,14 +1723,14 @@ class Quat
 		return $V;
 	}
 	
-	public static function clone( $A )
+	public static function clone( object $A )
 	{
 		$D = GLM::$ffi->new( GLM::$ffi_typeof_quat ); //!\ 'versor' is the name used by cglm for quaternion
 		GLM::$ffi->glmc_quat_copy( $A , $D );
 		return $D;
 	}
 	
-	public static function init( $Q , $V , float $angle = null )
+	public static function init( object $Q , object|array $V , float $angle = null )
 	{
 		if ( $angle === null )
 		{  
@@ -1783,14 +1749,14 @@ class Quat
 	}
 	
 	
-	public static function normalize( $Q )
+	public static function normalize( object|array $Q )
 	{
 		$Q = GLM::Quat( $Q );
 		GLM::$ffi->glmc_quat_normalize( $Q );
 		return $Q;
 	}
 	
-	public static function rotate_at( $M , $Q , $V_pivot )
+	public static function rotate_at( object $M , object|array $Q , object|array $V_pivot )
 	{
 		$Q       = GLM::Quat( $Q       );
 		$V_pivot = GLM::Vec3( $V_pivot );
@@ -1800,7 +1766,7 @@ class Quat
 		return $M;
 	}
 	
-	public static function rotate_at_m( $M , $Q , $V_pivot )
+	public static function rotate_at_m( object $M , object|array $Q , object|array $V_pivot )
 	{
 		$Q       = GLM::Quat( $Q       );
 		$V_pivot = GLM::Vec3( $V_pivot );
