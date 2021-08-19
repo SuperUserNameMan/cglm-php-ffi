@@ -92,6 +92,11 @@ GLM::GLM(); // autoinit
  * Vec2::scale( $V , 10.0 , $D );
  * ````
  * 
+ * However, regarding performance with PHP 8.0.8, even if JIT is enabled,
+ * relying on ` __staticCall() ` will gives very poor performances.
+ * For best performance, it is prefered to make direct use of the C API
+ * using the ` GLM::$ffi->glmc_...() ` interface.
+ * 
  */
 
 
@@ -1091,6 +1096,39 @@ class Vec3
 		
 		return $V_dest;
 	}
+	
+	// ----------------- overrides --------------------------------
+	
+	public static function add( $A , $B , $D=null )
+	{
+		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
+		GLM::$ffi->glmc_vec3_add( $A , $B , $D );
+		return $D;
+	}
+	
+	public static function sub( $A , $B , $D=null )
+	{
+		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
+		GLM::$ffi->glmc_vec3_sub( $A , $B , $D );
+		return $D;
+	}
+	
+	public static function adds( $A , float $s , $D=null )
+	{
+		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
+		GLM::$ffi->glmc_vec3_adds( $A , $s , $D );
+		return $D;
+	}
+	
+	public static function subs( $A , float $s , $D=null )
+	{
+		$D ??= GLM::$ffi->new( GLM::$ffi_typeof_vec3 );
+		GLM::$ffi->glmc_vec3_subs( $A , $s , $D );
+		return $D;
+	}
+	
+	// TODO : add more overrides when required
+	
 }
 
 
