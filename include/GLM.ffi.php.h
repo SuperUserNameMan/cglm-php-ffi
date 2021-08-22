@@ -5,18 +5,18 @@
 
 // TODO : convert macro GLM_ALIGN_IF(16) ?
 // TODO : understand the impact of this alignement with FFI depending on which plateform we are running
-// Notes : 
+// Notes :
 // - on linux x64, FFI::alignof() always return 4 (bytes) for each of these typedef
 // - __attribute((aligned(X))) seems to have no impact on FFI::alignof()
 // - i have obviously no clue what i'm trying to accomplish here ... !!!
 typedef                       float  vec2[2];
 typedef                       float  vec3[3];
 typedef                       int   ivec3[3];
-typedef __attribute((aligned(16))) /*CGLM_ALIGN_IF(16)*/ float  vec4[4]; 
+typedef __attribute((aligned(16))) /*CGLM_ALIGN_IF(16)*/ float  vec4[4];
 typedef                       vec4    versor;  /* |x, y, z, w| -> w is the last */
 typedef                       vec3   mat3[3];
-typedef __attribute((aligned(16))) /*CGLM_ALIGN_IF(16)*/ vec2   mat2[2]; 
-typedef __attribute((aligned(32))) /*CGLM_ALIGN_MAT*/    vec4   mat4[4]; 
+typedef __attribute((aligned(16))) /*CGLM_ALIGN_IF(16)*/ vec2   mat2[2];
+typedef __attribute((aligned(32))) /*CGLM_ALIGN_MAT*/    vec4   mat4[4];
 
 
 
@@ -29,25 +29,25 @@ typedef union
 }
 Aabb;
 
-typedef union 
-{ 
-	vec4 v[6]; 
+typedef union
+{
+	vec4 v[6];
 	struct { vec4 left, right, bottom, top, near, far; }
 }
 FrustumPlanes;
 
-typedef union 
-{ 
+typedef union
+{
 	vec4 v[8];
 	struct { vec4 LBN,LTN,RTN,RBN, LBF,LTF,RTF,RBF; }
-} 
+}
 FrustumCorners;
 
-typedef union 
-{ 
+typedef union
+{
 	vec4 v[4];
 	struct { vec4 LB,LT,RT,RB; }
-} 
+}
 PlaneCorners;
 
 
@@ -1203,6 +1203,8 @@ glmc_unproject(vec3 pos, mat4 m, vec4 vp, vec3 dest);
 void
 glmc_project(vec3 pos, mat4 m, vec4 vp, vec3 dest);
 
+void
+glmc_pickmatrix(vec2 center, vec2 size, vec4 vp, mat4 dest);
 
 // sphere.h --------------------------------------------------------------------------------------------------------------
 
