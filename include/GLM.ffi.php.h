@@ -1,4 +1,4 @@
-#define FFI_LIB "./lib/libcglm.so"
+//#define FFI_LIB "./lib/libcglm.so"
 
 
 // types.h ------------------------------------------------------------
