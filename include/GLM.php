@@ -180,7 +180,16 @@ class GLM
 		}
 		
 		$cdef = __DIR__ . '/GLM.ffi.php.h';
-		static::$ffi = FFI::load($cdef);
+		
+		$lib_dir = defined('FFI_LIB_DIR') ? FFI_LIB_DIR : 'lib' ;
+		
+		$slib = "./$lib_dir/".match( PHP_OS_FAMILY ) 
+		{
+			'Linux'   => 'libcglm.so',
+			'Windows' => 'libcglm.dll',
+		};
+		
+		static::$ffi = FFI::cdef( file_get_contents( $cdef ) , $slib );
 		
 		static::$ffi_typeof_void_p= static::$ffi->type( "void*"  ); // TODO FIXME HACK : find a better way to FFI::type("void");
 
@@ -221,61 +230,61 @@ class GLM
 		return 
 			$ffi_ret instanceof FFI\CData
 			&&
-			FFI::typeof( FFI::addr( $ffi_ret ) ) == static::$ffi_typeof_void_p // TODO HACK FIXME : with PHP8.8 I can't find a way to test directly against FFI::type("void");
+			FFI::typeof( FFI::addr( $ffi_ret ) ) == static::$ffi_typeof_void_p // TODO HACK FIXME : with PHP 8.0.8 I can't find a way to test directly against FFI::type("void");
 			;
 	}
 	
 	
-	public static function Vec2( object|array|int $V ) : object
+	public static function Vec2( object|array|int $V=null ) : object
 	{
 		if ( static::is_Vec2( $V ) ) return $V ;
 		
 		return Vec2::new( $V );
 	}
 	
-	public static function Vec3( object|array|int $V , float $_z = 0.0 ) : object
+	public static function Vec3( object|array|int $V=null , float $_z=0.0 ) : object
 	{
 		if ( static::is_Vec3( $V ) ) return $V ;
 		
 		return Vec3::new( $V , $_z );
 	}
 	
-	public static function Vec4( object|array|int $V , float $_w = 1.0 ) : object
+	public static function Vec4( object|array|int $V=null , float $_w=1.0 ) : object
 	{
 		if ( static::is_Vec4( $V ) ) return $V ;
 		
 		return Vec4::new( $V , $_w );
 	}
 	
-	public static function Mat2( object|array|int $M ) : object
+	public static function Mat2( object|array|int $M=null ) : object
 	{
 		if ( static::is_Mat2( $M ) ) return $M ;
 		
 		return Mat2::new( $M );
 	}
 	
-	public static function Mat3( object|array|int $M ) : object
+	public static function Mat3( object|array|int $M=null ) : object
 	{
 		if ( static::is_Mat3( $M ) ) return $M ;
 		
 		return Mat3::new( $M );
 	}
 	
-	public static function Mat4( object|array|int $M ) : object
+	public static function Mat4( object|array|int $M=null ) : object
 	{
 		if ( static::is_Mat4( $M ) ) return $M ;
 		
 		return Mat4::new( $M );
 	}
 	
-	public static function Aabb( object|array|int $B ) : object
+	public static function Aabb( object|array|int $B=null ) : object
 	{
 		if ( static::is_Aabb( $B ) ) return $B ;
 		
 		return Aabb::new( $B );
 	}
 	
-	public static function Quat( object|array|int $Q , float $_w = 0.0 ) : object
+	public static function Quat( object|array|int $Q=null , float $_w = 0.0 ) : object
 	{
 		if ( static::is_Quat( $Q ) ) return $Q ;
 		
