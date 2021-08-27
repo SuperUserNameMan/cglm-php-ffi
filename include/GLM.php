@@ -183,11 +183,7 @@ class GLM
 		
 		$lib_dir = defined('FFI_LIB_DIR') ? FFI_LIB_DIR : 'lib' ;
 		
-		$slib = "./$lib_dir/".match( PHP_OS_FAMILY ) 
-		{
-			'Linux'   => 'libcglm.so',
-			'Windows' => 'libcglm.dll',
-		};
+		$slib = "./$lib_dir/libcglm.".PHP_SHLIB_SUFFIX;
 		
 		static::$ffi = FFI::cdef( file_get_contents( $cdef ) , $slib );
 		
@@ -1767,5 +1763,4 @@ class Quat
 		return $M;
 	}
 }
-
 
